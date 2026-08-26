@@ -132,8 +132,9 @@ def fetch_history():
             for t in pd.read_html(r.text):
                 for rec in extract_rows_from_table(t):
                     found[rec["draw"]] = rec
-        except:
-            continue
+        except Exception as e:
+    print("FETCH ERROR:", url, repr(e), flush=True)
+    continue
 
     return [found[k] for k in sorted(found)]
 
