@@ -133,8 +133,8 @@ def fetch_history():
                 for rec in extract_rows_from_table(t):
                     found[rec["draw"]] = rec
         except Exception as e:
-    print("FETCH ERROR:", url, repr(e), flush=True)
-    continue
+            print("FETCH ERROR:", url, repr(e), flush=True)
+            continue
 
     return [found[k] for k in sorted(found)]
 
