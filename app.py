@@ -10,7 +10,17 @@ app = Flask(__name__)
 
 MIZUHO_CURRENT = "https://www.mizuhobank.co.jp/takarakuji/check/loto/loto7/index.html"
 MIZUHO_BACK_INDEX = "https://www.mizuhobank.co.jp/takarakuji/check/loto/backnumber/index.html"
-HEADERS = {"User-Agent": "Mozilla/5.0"}
+HEADERS = {
+
+    "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1",
+
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+
+    "Accept-Language": "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7",
+
+    "Referer": "https://www.mizuhobank.co.jp/",
+
+}
 
 def normalize_text(x):
     if x is None:
