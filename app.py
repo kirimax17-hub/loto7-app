@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-PAYPAY_CURRENT = "https://www.paypay-bank.co.jp/lottery/loto/loto7recent.html"
-PAYPAY_BACK_INDEX = "https://www.paypay-bank.co.jp/lottery/loto/loto7recent.html"
+PAYPAY_CURRENT = "https://www.japannetbank.co.jp/lottery/loto/loto7recent.iframe.html"
+PAYPAY_BACK_INDEX = "https://www.japannetbank.co.jp/lottery/loto/loto7recent.iframe.html"
 HEADERS = {
 
     "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1",
