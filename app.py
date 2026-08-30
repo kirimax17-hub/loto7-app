@@ -131,6 +131,7 @@ def fetch_history():
         r.raise_for_status()
 
         soup = BeautifulSoup(r.text, "html.parser")
+        print(soup.get_text(" ", strip=True)[:3000], flush=True)
         results = []
 
         for table in soup.find_all("table"):
