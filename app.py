@@ -8,8 +8,8 @@ from bs4 import BeautifulSoup
 
 app = Flask(__name__)
 
-MIZUHO_CURRENT = "https://www.mizuhobank.co.jp/takarakuji/check/loto/loto7/index.html"
-MIZUHO_BACK_INDEX = "https://www.mizuhobank.co.jp/takarakuji/check/loto/backnumber/index.html"
+PAYPAY_CURRENT = "https://www.paypay-bank.co.jp/lottery/loto/loto7recent.html"
+PAYPAY_BACK_INDEX = "https://www.paypay-bank.co.jp/lottery/loto/loto7recent.html"
 HEADERS = {
 
     "User-Agent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.6 Mobile/15E148 Safari/604.1",
@@ -18,7 +18,7 @@ HEADERS = {
 
     "Accept-Language": "ja-JP,ja;q=0.9,en-US;q=0.8,en;q=0.7",
 
-    "Referer": "https://www.mizuhobank.co.jp/",
+    "Referer": "https://www.paypay-bank.co.jp/" ,
 
 }
 
@@ -113,12 +113,12 @@ def extract_rows_from_table(df):
     return results
 
 def discover_links():
-    r = requests.get(MIZUHO_BACK_INDEX, headers=HEADERS, timeout=20)
+    r = requests.get(PAYPAY_BACK_INDEX, headers=HEADERS, timeout=20)
     r.raise_for_status()
     soup = BeautifulSoup(r.text, "html.parser")
     links = set()
     for a in soup.find_all("a", href=True):
-        href = urljoin(MIZUHO_BACK_INDEX, a["href"])
+        href = urljoin(PAYPAY_BACK_INDEX, a["href"])
         text = a.get_text(" ", strip=True)
         if "type=loto7" in href.lower():
             links.add(href)
