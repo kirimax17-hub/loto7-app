@@ -126,27 +126,68 @@ def discover_links():
     return sorted(links)
 
 def fetch_history():
-    urls = []
     try:
-        urls += discover_links()
-    except:
-        pass
-    urls.append(PAYPAY_CURRENT)
+        r = requests.get(PAYPAY_CURRENT, headers=HEADERS, timeout=20)
+        r.raise_for_status()
 
-    found = {}
-    for url in dict.fromkeys(urls):
-        try:
-            r = requests.get(url, headers=HEADERS, timeout=20)
-            r.raise_for_status()
-            for t in pd.read_html(r.text):
-                for rec in extract_rows_from_table(t):
-                    found[rec["draw"]] = rec
-        except Exception as e:
-            print("FETCH ERROR:", url, repr(e), flush=True)
-            continue
+        soup = BeautifulSoup(r.text, "html.parser")
+        results = []
 
-    return [found[k] for k in sorted(found)]
+        for table in soup.find_all("table"):
+            text = normalize_text(table.get_text(" ", strip=True))
 
+            draw_match = re.search(r"(?:第\s*)?(\d{3,4})\s*回", text)
+            date_match = re.search(
+                r"(20\d{2})[年/\-.]\s*(\d{1,2})[月/\-.]\s*(\d{1,2})日?",
+                text
+            )
+
+            if not draw_match:
+                continue
+
+            draw = int(draw_match.group(1))
+
+            date = ""
+            if date_match:
+                y, m, d = map(int, date_match.groups())
+                date = f"{y:04d}-{m:02d}-{d:02d}"
+
+            main_nums = []
+            bonus_nums = []
+
+            main_match = re.search(
+                r"本数字\s*([0-9\s,\-・]+?)(?:ボーナス数字|当せん金額|$)",
+                text
+            )
+            if main_match:
+                main_nums = [
+                    int(n) for n in re.findall(r"\d+", main_match.group(1))
+                    if 1 <= int(n) <= 37
+                ][:7]
+
+            bonus_match = re.search(
+                r"ボーナス数字\s*([0-9\s,\-・]+?)(?:当せん金額|1等|$)",
+                text
+            )
+            if bonus_match:
+                bonus_nums = [
+                    int(n) for n in re.findall(r"\d+", bonus_match.group(1))
+                    if 1 <= int(n) <= 37
+                ][:2]
+
+            if len(main_nums) == 7:
+                results.append({
+                    "draw": draw,
+                    "date": date,
+                    "main": sorted(main_nums),
+                    "bonus": bonus_nums
+                })
+
+        return sorted(results, key=lambda x: x["draw"])
+
+    except Exception as e:
+        print("FETCH ERROR:", repr(e), flush=True)
+        return []
 @app.get("/")
 def index():
     return render_template("index.html")
