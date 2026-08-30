@@ -132,7 +132,7 @@ def fetch_history():
         urls += discover_links()
     except:
         pass
-    urls.append(MIZUHO_CURRENT)
+    urls.append(PAYPAY_CURRENT)
 
     found = {}
     for url in dict.fromkeys(urls):
