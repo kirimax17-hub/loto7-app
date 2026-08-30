@@ -58,58 +58,57 @@ def parse_date(x):
 
 def extract_rows_from_table(df):
     results = []
-    df = df.copy()
-    cols = []
-    for c in df.columns:
-        if isinstance(c, tuple):
-            cols.append(" ".join(map(str, c)))
-        else:
-            cols.append(str(c))
-    df.columns = [normalize_text(c) for c in cols]
 
+    df = df.fillna("")
+
+    rows = []
     for _, row in df.iterrows():
-        items = [normalize_text(v) for v in row.tolist()]
-        draw = None
-        date = ""
-        for v in items:
-            if draw is None:
-                draw = parse_draw_number(v)
-            if not date:
-                date = parse_date(v)
+        rows.append([normalize_text(v) for v in row.tolist()])
 
-        main_nums, bonus_nums = [], []
-        for col, val in zip(df.columns, items):
-            nums = digits_from_cell(val)
-            if "本数字" in col:
-                main_nums.extend(nums)
-            elif "ボーナス" in col:
-                bonus_nums.extend(nums)
+    draw = None
+    date = ""
+    main_nums = []
+    bonus_nums = []
 
-        if len(main_nums) < 7:
-            candidates = []
-            for col, val in zip(df.columns, items):
-                if any(k in col for k in ["回", "抽せん日", "抽選日", "口数", "金額", "販売"]):
-                    continue
-                nums = digits_from_cell(val)
-                if nums:
-                    candidates.extend(nums)
-            if len(candidates) >= 7:
-                main_nums = candidates[:7]
-                if len(candidates) >= 9:
-                    bonus_nums = candidates[7:9]
+    for items in rows:
+        text = " ".join(items)
 
-        if draw and len(main_nums) >= 7:
-            main_nums = sorted(main_nums[:7])
-            if len(set(main_nums)) == 7:
-                bonus_nums = [n for n in bonus_nums if n not in main_nums][:2]
-                while len(bonus_nums) < 2:
-                    bonus_nums.append(None)
-                results.append({
-                    "draw": draw,
-                    "date": date,
-                    "main": main_nums,
-                    "bonus": bonus_nums
-                })
+        # 回号
+        if draw is None:
+            for v in items:
+                d = parse_draw_number(v)
+                if d:
+                    draw = d
+                    break
+
+        # 抽せん日
+        if not date:
+            for v in items:
+                d = parse_date(v)
+                if d:
+                    date = d
+                    break
+
+        # 本数字
+        if "本数字" in text:
+            nums = digits_from_cell(text)
+            if len(nums) >= 7:
+                main_nums = nums[:7]
+
+        # ボーナス数字
+        if "ボーナス数字" in text:
+            nums = digits_from_cell(text)
+            if len(nums) >= 2:
+                bonus_nums = nums[:2]
+
+    if draw and len(main_nums) == 7:
+        results.append({
+            "draw": draw,
+            "date": date,
+            "main": sorted(main_nums),
+            "bonus": bonus_nums[:2]
+        })
+
     return results
 
 def discover_links():
