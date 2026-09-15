@@ -109,37 +109,112 @@ def fetch_history():
 
     all_results = {}
 
-    current_year = datetime.now().year
-
-    # ロト7開始年から現在年まで全部取得
-    for year in range(2013, current_year + 1):
-
+    # 2013～2023は年別ページ
+    for year in range(2013, 2024):
         try:
             rows = parse_year(year)
 
-            print(
-                f"YEAR {year}: {len(rows)} records",
-                flush=True
-            )
+            print(f"YEAR {year}: {len(rows)} records", flush=True)
 
             for row in rows:
                 all_results[row["draw"]] = row
 
         except Exception as e:
+            print(f"YEAR ERROR {year}: {repr(e)}", flush=True)
 
-            print(
-                f"YEAR ERROR {year}: {repr(e)}",
-                flush=True
+    # 2024年以降は現在のメインページから取得
+    try:
+        url = BASE_URL
+
+        r = requests.get(url, headers=HEADERS, timeout=20)
+        r.raise_for_status()
+        r.encoding = r.apparent_encoding
+
+        soup = BeautifulSoup(r.text, "html.parser")
+
+        current_results = []
+
+        for tr in soup.find_all("tr"):
+
+            cells = [
+                re.sub(r"\s+", " ", td.get_text(" ", strip=True)).strip()
+                for td in tr.find_all(["td", "th"])
+            ]
+
+            if not cells:
+                continue
+
+            row_text = " ".join(cells)
+
+            draw_match = re.search(r"第\s*(\d+)\s*回", row_text)
+
+            if not draw_match:
+                continue
+
+            draw = int(draw_match.group(1))
+
+            # 556回以降だけ取得
+            if draw < 556:
+                continue
+
+            date_match = re.search(
+                r"(20\d{2})/(\d{1,2})/(\d{1,2})",
+                row_text
             )
 
-    results = list(all_results.values())
+            if not date_match:
+                continue
 
+            y, m, d = map(int, date_match.groups())
+            date = f"{y:04d}-{m:02d}-{d:02d}"
+
+            numbers = []
+
+            for cell in cells:
+
+                if "第" in cell and "回" in cell:
+                    continue
+
+                if re.search(r"20\d{2}/\d{1,2}/\d{1,2}", cell):
+                    continue
+
+                if re.fullmatch(r"\d{1,2}", cell):
+                    n = int(cell)
+
+                    if 1 <= n <= 37:
+                        numbers.append(n)
+
+            if len(numbers) >= 9:
+
+                current_results.append({
+                    "draw": draw,
+                    "date": date,
+                    "main": numbers[:7],
+                    "bonus": numbers[7:9]
+                })
+
+        print(
+            f"CURRENT PAGE: {len(current_results)} records",
+            flush=True
+        )
+
+        for row in current_results:
+            all_results[row["draw"]] = row
+
+    except Exception as e:
+        print("CURRENT PAGE ERROR:", repr(e), flush=True)
+
+    results = list(all_results.values())
     results.sort(key=lambda x: x["draw"])
 
-    print(
-        f"TOTAL HISTORY: {len(results)} records",
-        flush=True
-    )
+    print(f"TOTAL HISTORY: {len(results)} records", flush=True)
+
+    if results:
+        print(
+            f"FIRST DRAW: {results[0]['draw']} / "
+            f"LATEST DRAW: {results[-1]['draw']}",
+            flush=True
+        )
 
     return results
 
