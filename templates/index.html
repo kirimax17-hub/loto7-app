@@ -67,9 +67,22 @@
   </div>
 
   <div class="card">
-    <h3 style="margin-top:0">次回30通り</h3>
-    <div id="tickets" class="tiny">まだ生成していません。</div>
+  <h3 style="margin-top:0">次回30通り</h3>
+  <div id="tickets" class="tiny">まだ生成していません。</div>
+
+  <div style="margin-top:16px">
+    <button id="purchaseBtn"
+            style="width:100%;display:none"
+            onclick="confirmPurchase()">
+      この30通りを購入済みにする（¥9,000）
+    </button>
   </div>
+
+  <div id="purchaseStatus"
+       class="tiny"
+       style="margin-top:10px">
+  </div>
+</div>
 
   <div class="card">
     <h3 style="margin-top:0">一致数・等級</h3>
