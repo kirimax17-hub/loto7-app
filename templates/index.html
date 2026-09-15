@@ -2,15 +2,11 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
-
-  <meta name="viewport"
-        content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-  <meta name="theme-color" content="#f3f6fb">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
 
   <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style"
-        content="black-translucent">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="ロト7">
 
   <link rel="manifest" href="/static/manifest.json">
@@ -18,848 +14,693 @@
 
   <title>ロト7 30通り</title>
 
-<style>
-
-:root{
-  --bg:#f3f6fb;
-  --card:#ffffff;
-  --ink:#111827;
-  --muted:#6b7280;
-
-  --blue:#1557a0;
-  --blue-soft:#edf5ff;
-
-  --green:#079455;
-  --green-soft:#ecfdf3;
-
-  --red:#b42318;
-  --red-soft:#fff1f2;
-
-  --yellow:#b7791f;
-  --yellow-soft:#fff8df;
-
-  --purple:#6366f1;
-  --purple-soft:#eef2ff;
-
-  --border:#e7ebf0;
-}
-
-*{
-  box-sizing:border-box;
-}
-
-body{
-  margin:0;
-  font-family:
-    -apple-system,
-    BlinkMacSystemFont,
-    "Helvetica Neue",
-    Arial,
-    sans-serif;
-
-  background:
-    linear-gradient(
-      180deg,
-      #f7f9fc 0%,
-      #f1f5f9 100%
-    );
-
-  color:var(--ink);
-}
-
-.wrap{
-  max-width:760px;
-  margin:auto;
-
-  padding:
-    calc(env(safe-area-inset-top) + 16px)
-    14px
-    calc(env(safe-area-inset-bottom) + 30px);
-}
-
-h1{
-  font-size:25px;
-  margin:4px 0 4px;
-}
-
-.sub{
-  color:var(--muted);
-  font-size:13px;
-  margin-bottom:14px;
-}
-
-.card{
-  background:var(--card);
-  border-radius:20px;
-  padding:16px;
-  margin:12px 0;
-
-  border:1px solid rgba(226,232,240,.8);
-
-  box-shadow:
-    0 3px 14px rgba(15,23,42,.05);
-}
-
-.row{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.row > *{
-  flex:1;
-}
-
-button{
-  border:0;
-  border-radius:14px;
-
-  padding:14px 12px;
-
-  font-size:16px;
-  font-weight:700;
-
-  background:#111827;
-  color:white;
-
-  cursor:pointer;
-
-  transition:
-    transform .08s ease,
-    opacity .15s ease;
-}
-
-button:active{
-  transform:scale(.98);
-}
-
-button.secondary{
-  background:#eef2f7;
-  color:#1f2937;
-}
-
-button.blue{
-  background:
-    linear-gradient(
-      135deg,
-      #1459a5,
-      #0f4a8a
-    );
-}
-
-button.green{
-  background:
-    linear-gradient(
-      135deg,
-      #079455,
-      #0aaa62
-    );
-}
-
-button.purchased{
-  background:#9297a1;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.stat{
-  background:#f8fafc;
-  border-radius:16px;
-  padding:14px;
-}
-
-.stat b{
-  display:block;
-  font-size:21px;
-  margin-top:5px;
-}
-
-.stat.blueStat{
-  background:var(--blue-soft);
-}
-
-.stat.greenStat{
-  background:var(--green-soft);
-}
-
-.stat.redStat{
-  background:var(--red-soft);
-}
-
-.stat.purpleStat{
-  background:var(--purple-soft);
-}
-
-.ticket{
-  display:flex;
-  align-items:center;
-
-  padding:11px 0;
-
-  border-bottom:1px solid #edf0f3;
-}
-
-.ticket:last-child{
-  border-bottom:none;
-}
-
-.badge{
-  min-width:42px;
-  height:34px;
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  margin-right:10px;
-
-  font-size:13px;
-
-  color:#53627a;
-
-  background:#eef3ff;
-
-  border-radius:999px;
-}
-
-.nums{
-  display:flex;
-  justify-content:flex-end;
-  gap:5px;
-
-  width:100%;
-
-  font-variant-numeric:tabular-nums;
-}
-
-.ball{
-  width:35px;
-  height:35px;
-
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-
-  border-radius:50%;
-
-  font-weight:700;
-  font-size:14px;
-
-  color:#172033;
-}
-
-.ball:nth-child(4n+1){
-  background:#e1edff;
-}
-
-.ball:nth-child(4n+2){
-  background:#ffe3e8;
-}
-
-.ball:nth-child(4n+3){
-  background:#fff0bd;
-}
-
-.ball:nth-child(4n){
-  background:#dcf6e7;
-}
-
-input{
-  width:100%;
-
-  padding:12px;
-
-  border:1px solid #d1d5db;
-  border-radius:12px;
-
-  font-size:16px;
-
-  background:white;
-}
-
-label{
-  display:block;
-
-  font-size:13px;
-  color:var(--muted);
-
-  margin-bottom:5px;
-}
-
-.tiny{
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.6;
-}
-
-.good{
-  color:var(--green);
-}
-
-.bad{
-  color:var(--red);
-}
-
-details summary{
-  font-weight:700;
-  cursor:pointer;
-}
-
-.rank{
-  font-size:13px;
-  line-height:1.8;
-}
-
-.predictionHeader{
-  padding:14px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f4f8ff,
-      #edf4ff
-    );
-
-  border-radius:16px;
-
-  margin-bottom:12px;
-}
-
-.predictionTitle{
-  font-size:19px;
-  font-weight:800;
-
-  color:#142b4a;
-}
-
-.predictionSub{
-  margin-top:5px;
-
-  color:#64748b;
-
-  font-size:13px;
-}
-
-.notice{
-  margin-top:16px;
-
-  padding:14px;
-
-  background:#f6f9fd;
-
-  border-radius:14px;
-
-  line-height:1.7;
-
-  color:#667085;
-
-  font-size:12px;
-}
-
-.purchaseArea{
-  margin-top:16px;
-}
-
-.purchaseStatus{
-  margin-top:10px;
-
-  padding:11px 12px;
-
-  border-radius:12px;
-
-  font-size:12px;
-  line-height:1.5;
-}
-
-.purchaseStatus.preview{
-  background:var(--green-soft);
-  color:#087443;
-}
-
-.purchaseStatus.done{
-  background:#f3f4f6;
-  color:#667085;
-}
-
-.matchHeader{
-  padding:12px 14px;
-
-  margin-bottom:14px;
-
-  border-radius:14px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #f2f5ff,
-      #edf2ff
-    );
-}
-
-.matchGrid{
-  display:grid;
-
-  grid-template-columns:
-    repeat(5,1fr);
-
-  gap:7px;
-
-  margin-bottom:14px;
-}
-
-.matchBox{
-  border-radius:14px;
-
-  padding:12px 5px;
-
-  text-align:center;
-
-  font-size:11px;
-}
-
-.matchBox b{
-  display:block;
-
-  margin-top:5px;
-
-  font-size:19px;
-}
-
-.match3{
-  background:#f5f6f8;
-}
-
-.match4{
-  background:#edf5ff;
-  color:#1261a6;
-}
-
-.match5{
-  background:#ecfdf3;
-  color:#087443;
-}
-
-.match6{
-  background:#fff8df;
-  color:#946200;
-}
-
-.match7{
-  background:#fff0f1;
-  color:#a61b1b;
-}
-
-@media(max-width:520px){
-
-  .wrap{
-    padding-left:12px;
-    padding-right:12px;
-  }
-
-  .card{
-    padding:15px;
-  }
-
-  .nums{
-    gap:3px;
-  }
-
-  .ball{
-    width:32px;
-    height:32px;
-    font-size:13px;
-  }
-
-  .matchGrid{
-    gap:5px;
-  }
-
-  .matchBox{
-    padding:10px 3px;
-  }
-}
-
-</style>
+  <style>
+    :root{
+      --bg:#f3f6fa;
+      --card:#ffffff;
+      --ink:#111827;
+      --muted:#6b7280;
+
+      --blue:#1d5fa7;
+      --blue2:#eaf3ff;
+
+      --green:#087f5b;
+      --greenbg:#eafaf2;
+
+      --red:#b42318;
+      --redbg:#fff0f0;
+
+      --yellow:#946200;
+      --yellowbg:#fff7dc;
+
+      --purplebg:#eef1ff;
+    }
+
+    *{
+      box-sizing:border-box;
+    }
+
+    body{
+      margin:0;
+      font-family:
+        -apple-system,
+        BlinkMacSystemFont,
+        "Helvetica Neue",
+        Arial,
+        sans-serif;
+
+      background:var(--bg);
+      color:var(--ink);
+    }
+
+    .wrap{
+      max-width:760px;
+      margin:auto;
+
+      padding:
+        calc(env(safe-area-inset-top) + 16px)
+        14px
+        calc(env(safe-area-inset-bottom) + 30px);
+    }
+
+    h1{
+      font-size:25px;
+      margin:4px 0 4px;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:14px;
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:20px;
+      padding:16px;
+      margin:12px 0;
+      box-shadow:0 2px 12px rgba(0,0,0,.05);
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .row > *{
+      flex:1;
+    }
+
+    button{
+      border:0;
+      border-radius:14px;
+      padding:15px 12px;
+
+      font-size:16px;
+      font-weight:700;
+
+      background:#111827;
+      color:white;
+
+      cursor:pointer;
+    }
+
+    button.blue{
+      background:var(--blue);
+    }
+
+    button.secondary{
+      background:#edf2f7;
+      color:#111827;
+    }
+
+    button:disabled{
+      background:#9ca3af;
+      color:white;
+      cursor:default;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:10px;
+    }
+
+    .stat{
+      border-radius:16px;
+      padding:14px;
+      background:#f8fafc;
+    }
+
+    .stat.latest{
+      background:#eaf3ff;
+    }
+
+    .stat.history{
+      background:#eef1ff;
+    }
+
+    .stat.prize{
+      background:#eafaf2;
+    }
+
+    .stat.profit-negative{
+      background:#fff0f0;
+    }
+
+    .stat b{
+      display:block;
+      font-size:21px;
+      margin-top:5px;
+    }
+
+    .ticket{
+      display:flex;
+      align-items:center;
+      gap:10px;
+
+      padding:11px 0;
+      border-bottom:1px solid #eee;
+    }
+
+    .badge{
+      min-width:36px;
+      height:36px;
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:50%;
+
+      font-size:13px;
+      background:#eef2ff;
+      color:#596273;
+    }
+
+    .nums{
+      flex:1;
+      display:flex;
+      justify-content:space-between;
+      gap:4px;
+
+      font-variant-numeric:tabular-nums;
+      font-weight:700;
+    }
+
+    .num{
+      min-width:32px;
+      height:32px;
+
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+
+      border-radius:50%;
+      background:#edf4ff;
+    }
+
+    .num:nth-child(2n){
+      background:#fff0f3;
+    }
+
+    .num:nth-child(3n){
+      background:#fff6d8;
+    }
+
+    .num:nth-child(4n){
+      background:#eaf9ef;
+    }
+
+    input{
+      width:100%;
+      padding:12px;
+
+      border:1px solid #d1d5db;
+      border-radius:12px;
+
+      font-size:16px;
+    }
+
+    label{
+      display:block;
+
+      font-size:13px;
+      color:var(--muted);
+
+      margin-bottom:5px;
+    }
+
+    .tiny{
+      font-size:12px;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .good{
+      color:var(--green);
+    }
+
+    .bad{
+      color:var(--red);
+    }
+
+    details summary{
+      font-weight:700;
+      cursor:pointer;
+      font-size:17px;
+    }
+
+    .rank{
+      font-size:14px;
+      line-height:1.9;
+    }
+
+    .prediction-title{
+      padding:14px;
+      border-radius:16px;
+      background:#edf4ff;
+      margin-bottom:14px;
+    }
+
+    .prediction-title strong{
+      display:block;
+      font-size:19px;
+      margin-bottom:5px;
+    }
+
+    .notice{
+      margin-top:16px;
+      padding:14px;
+
+      border-radius:14px;
+
+      background:#f5f7fa;
+      color:#667085;
+
+      font-size:13px;
+      line-height:1.8;
+    }
+
+    .purchase-info{
+      margin-top:12px;
+      padding:12px;
+
+      border-radius:12px;
+      background:#f5f7fa;
+    }
+
+    .match-grid{
+      display:grid;
+      grid-template-columns:repeat(5,1fr);
+      gap:7px;
+
+      margin-top:12px;
+    }
+
+    .match-box{
+      text-align:center;
+      padding:10px 4px;
+
+      border-radius:14px;
+      background:#f5f6f8;
+
+      font-size:12px;
+    }
+
+    .match-box:nth-child(2){
+      background:#eaf4ff;
+      color:#1466ad;
+    }
+
+    .match-box:nth-child(3){
+      background:#eafaf2;
+      color:#087f5b;
+    }
+
+    .match-box:nth-child(4){
+      background:#fff7dc;
+      color:#946200;
+    }
+
+    .match-box:nth-child(5){
+      background:#fff0f0;
+      color:#b42318;
+    }
+
+    .match-box b{
+      display:block;
+      font-size:20px;
+      margin-top:4px;
+    }
+
+    .result-message{
+      padding:13px;
+      border-radius:12px;
+      background:#f3f6fb;
+      color:#667085;
+      line-height:1.7;
+    }
+
+    @media(max-width:500px){
+      .nums{
+        font-size:13px;
+      }
+
+      .num{
+        min-width:30px;
+        width:30px;
+        height:30px;
+      }
+
+      .match-box{
+        font-size:11px;
+      }
+
+      .match-box b{
+        font-size:18px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <div class="wrap">
 
-<h1>ロト7 30通りジェネレーター</h1>
+  <h1>ロト7 30通りジェネレーター</h1>
 
-<div class="sub">
-  iPhoneホーム画面対応 / 過去結果更新 / 自動照合 / 収支管理
-</div>
-
-
-<!-- 上部ボタン -->
-
-<div class="card">
-
-  <div class="row">
-
-    <button class="blue"
-            onclick="updateHistory()">
-      ① 結果を更新
-    </button>
-
-    <button onclick="generateTickets()">
-      ② 次回30通り
-    </button>
-
+  <div class="sub">
+    iPhoneホーム画面対応 / 過去結果更新 / 自動照合 / 収支管理
   </div>
 
-  <div id="status"
-       class="tiny"
-       style="margin-top:10px">
-    準備完了
-  </div>
 
-</div>
+  <!-- 操作 -->
+  <div class="card">
 
+    <div class="row">
 
-<!-- 統計 -->
+      <button
+        class="blue"
+        onclick="updateHistory()"
+      >
+        ① 結果を更新
+      </button>
 
-<div class="card">
+      <button
+        onclick="generateTickets()"
+      >
+        ② 次回30通り
+      </button>
 
-  <div class="stats">
-
-    <div class="stat blueStat">
-      最新回
-      <b id="latestDraw">-</b>
     </div>
 
-    <div class="stat purpleStat">
-      保存回数
-      <b id="historyCount">0</b>
-    </div>
-
-    <div class="stat">
-      累計購入額
-      <b id="purchase">¥0</b>
-    </div>
-
-    <div class="stat greenStat">
-      累計当選額
-      <b id="prize">¥0</b>
-    </div>
-
-    <div class="stat redStat">
-      累計収支
-      <b id="profit">¥0</b>
-    </div>
-
-    <div class="stat">
-      照合済み
-      <b id="checked">0口</b>
+    <div
+      id="status"
+      class="tiny"
+      style="margin-top:10px"
+    >
+      準備完了
     </div>
 
   </div>
 
-</div>
+
+  <!-- 統計 -->
+  <div class="card">
+
+    <div class="stats">
+
+      <div class="stat latest">
+        最新回
+        <b id="latestDraw">-</b>
+      </div>
+
+      <div class="stat history">
+        保存回数
+        <b id="historyCount">0</b>
+      </div>
+
+      <div class="stat">
+        累計購入額
+        <b id="purchase">¥0</b>
+      </div>
+
+      <div class="stat prize">
+        累計当選額
+        <b id="prize">¥0</b>
+      </div>
+
+      <div
+        class="stat profit-negative"
+        id="profitBox"
+      >
+        累計収支
+        <b id="profit">¥0</b>
+      </div>
+
+      <div class="stat">
+        照合済み
+        <b id="checked">0口</b>
+      </div>
+
+    </div>
+
+  </div>
 
 
-<!-- 生成設定 -->
+  <!-- ロジック -->
+  <div class="card">
 
-<div class="card">
+    <details>
 
-<details>
+      <summary>▶ 生成ロジック設定</summary>
 
-<summary>
-  ▶ 生成ロジック設定
-</summary>
+      <div style="margin-top:14px">
 
-<div style="margin-top:14px">
+        <label>
+          全期間の出現率 (%)
+        </label>
 
-<label>
-  全期間の出現率 (%)
-</label>
-
-<input id="allW"
-       type="number"
-       value="55">
-
-
-<label style="margin-top:10px">
-  直近100回の出現率 (%)
-</label>
-
-<input id="recentW"
-       type="number"
-       value="30">
+        <input
+          id="allW"
+          type="number"
+          value="55"
+        >
 
 
-<label style="margin-top:10px">
-  均等ランダム (%)
-</label>
+        <label style="margin-top:10px">
+          直近100回の出現率 (%)
+        </label>
 
-<input id="uniformW"
-       type="number"
-       value="15">
-
-
-<label style="margin-top:10px">
-  30口同士の最大共通数字数
-</label>
-
-<input id="maxOverlap"
-       type="number"
-       value="5"
-       min="0"
-       max="6">
-
-</div>
-
-</details>
-
-</div>
+        <input
+          id="recentW"
+          type="number"
+          value="30"
+        >
 
 
-<!-- 予測 -->
+        <label style="margin-top:10px">
+          均等ランダム (%)
+        </label>
 
-<div class="card">
-
-<h3 style="margin-top:0">
-  次回30通り
-</h3>
-
-<div id="tickets"
-     class="tiny">
-
-  まだ生成していません。
-
-</div>
+        <input
+          id="uniformW"
+          type="number"
+          value="15"
+        >
 
 
-<div class="purchaseArea">
+        <label style="margin-top:10px">
+          30口同士の最大共通数字数
+        </label>
 
-<button id="purchaseBtn"
-        class="green"
+        <input
+          id="maxOverlap"
+          type="number"
+          value="5"
+          min="0"
+          max="6"
+        >
+
+      </div>
+
+    </details>
+
+  </div>
+
+
+  <!-- 予測 -->
+  <div class="card">
+
+    <h3 style="margin-top:0">
+      次回30通り
+    </h3>
+
+    <div
+      id="tickets"
+      class="tiny"
+    >
+      まだ生成していません。
+    </div>
+
+
+    <div style="margin-top:16px">
+
+      <button
+        id="purchaseBtn"
+        class="blue"
         style="width:100%;display:none"
-        onclick="confirmPurchase()">
+        onclick="confirmPurchase()"
+      >
+        この30通りを購入済みにする（¥9,000）
+      </button>
 
-  この30通りを購入済みにする（¥9,000）
-
-</button>
-
-
-<div id="purchaseStatus"></div>
-
-</div>
-
-</div>
+    </div>
 
 
-<!-- 照合 -->
+    <div
+      id="purchaseStatus"
+      class="tiny purchase-info"
+      style="display:none"
+    ></div>
 
-<div class="card">
-
-<div class="matchHeader">
-
-  <h3 style="margin:0">
-    📊 一致数・等級
-  </h3>
-
-</div>
-
-
-<div class="matchGrid">
-
-  <div class="matchBox match3">
-    3個一致
-    <b id="m3">0口</b>
   </div>
 
-  <div class="matchBox match4">
-    4個一致
-    <b id="m4">0口</b>
-  </div>
 
-  <div class="matchBox match5">
-    5個一致
-    <b id="m5">0口</b>
-  </div>
+  <!-- 照合 -->
+  <div class="card">
 
-  <div class="matchBox match6">
-    6個一致
-    <b id="m6">0口</b>
-  </div>
+    <h3 style="margin-top:0">
+      📊 一致数・等級
+    </h3>
 
-  <div class="matchBox match7">
-    7個一致
-    <b id="m7">0口</b>
-  </div>
-
-</div>
+    <div id="matchStats"></div>
 
 
-<div id="matchStats"
-     style="display:none">
-</div>
+    <div
+      class="row"
+      style="margin-top:14px"
+    >
+
+      <button
+        class="blue"
+        onclick="checkResults()"
+      >
+        🔍 ③ 当選結果と照合
+      </button>
+
+      <button
+        class="secondary"
+        onclick="showPrizeInput()"
+      >
+        ✎ 当選額を入力
+      </button>
+
+    </div>
 
 
-<div class="row">
+    <div
+      id="prizeBox"
+      style="display:none;margin-top:14px"
+    >
 
-<button class="blue"
-        onclick="checkResults()">
+      <label>
+        対象回
+      </label>
 
-  🔍 ③ 当選結果と照合
-
-</button>
-
-<button class="secondary"
-        onclick="showPrizeInput()">
-
-  ✎ 当選額を入力
-
-</button>
-
-</div>
+      <input
+        id="prizeDraw"
+        type="number"
+      >
 
 
-<div id="prizeBox"
-     style="display:none;margin-top:14px">
+      <div
+        class="row"
+        style="margin-top:10px"
+      >
 
-<label>
-  対象回
-</label>
+        <div>
+          <label>1等</label>
+          <input id="p1" type="number" value="0">
+        </div>
 
-<input id="prizeDraw"
-       type="number">
+        <div>
+          <label>2等</label>
+          <input id="p2" type="number" value="0">
+        </div>
 
-
-<div class="row"
-     style="margin-top:10px">
-
-<div>
-
-<label>1等</label>
-
-<input id="p1"
-       type="number"
-       value="0">
-
-</div>
-
-<div>
-
-<label>2等</label>
-
-<input id="p2"
-       type="number"
-       value="0">
-
-</div>
-
-</div>
+      </div>
 
 
-<div class="row"
-     style="margin-top:10px">
+      <div
+        class="row"
+        style="margin-top:10px"
+      >
 
-<div>
+        <div>
+          <label>3等</label>
+          <input id="p3" type="number" value="0">
+        </div>
 
-<label>3等</label>
+        <div>
+          <label>4等</label>
+          <input id="p4" type="number" value="0">
+        </div>
 
-<input id="p3"
-       type="number"
-       value="0">
-
-</div>
-
-<div>
-
-<label>4等</label>
-
-<input id="p4"
-       type="number"
-       value="0">
-
-</div>
-
-</div>
+      </div>
 
 
-<div class="row"
-     style="margin-top:10px">
+      <div
+        class="row"
+        style="margin-top:10px"
+      >
 
-<div>
+        <div>
+          <label>5等</label>
+          <input id="p5" type="number" value="0">
+        </div>
 
-<label>5等</label>
+        <div>
+          <label>6等</label>
+          <input id="p6" type="number" value="0">
+        </div>
 
-<input id="p5"
-       type="number"
-       value="0">
-
-</div>
-
-<div>
-
-<label>6等</label>
-
-<input id="p6"
-       type="number"
-       value="0">
-
-</div>
-
-</div>
+      </div>
 
 
-<button class="green"
+      <button
         style="margin-top:12px;width:100%"
-        onclick="savePrizes()">
+        onclick="savePrizes()"
+      >
+        当選額を保存
+      </button>
 
-  当選額を保存
+    </div>
 
-</button>
-
-</div>
-
-</div>
-
-
-<!-- ランキング -->
-
-<div class="card">
-
-<h3 style="margin-top:0">
-  数字の出現ランキング
-</h3>
-
-<div id="ranking"
-     class="rank">
-
-  結果を更新すると表示されます。
-
-</div>
-
-</div>
+  </div>
 
 
-<!-- 注意 -->
+  <!-- ランキング -->
+  <div class="card">
 
-<div class="card tiny">
+    <h3 style="margin-top:0">
+      数字の出現ランキング
+    </h3>
 
-過去の1等本数字7個と完全一致する組み合わせは生成対象から除外します。
+    <div
+      id="ranking"
+      class="rank"
+    >
+      結果を更新すると表示されます。
+    </div>
 
-<br><br>
+  </div>
 
-公平な抽せんでは、過去の出現頻度や過去当選組み合わせの除外によって、
-次回の数学的当選確率が上がる保証はありません。
 
-</div>
+  <!-- 注意 -->
+  <div class="card tiny">
 
+    ℹ️ 過去に出た本数字7個の完全一致組み合わせは
+    生成対象から除外しています。
+
+    <br><br>
+
+    ただし、この除外や過去の出現傾向を利用すること自体が、
+    将来の抽せんにおける数学的な当選確率を高めるものではありません。
+
+  </div>
 
 </div>
+
 
 
 <script>
+
+/* =========================
+   localStorage
+========================= */
 
 const LS = {
 
@@ -895,12 +736,14 @@ const get = (k,d) => {
 };
 
 
-const set = (k,v) =>
+const set = (k,v) => {
 
   localStorage.setItem(
     k,
     JSON.stringify(v)
   );
+
+};
 
 
 const yen = n =>
@@ -910,6 +753,10 @@ const yen = n =>
     .toLocaleString("ja-JP");
 
 
+
+/* =========================
+   等級
+========================= */
 
 function rankOf(
   mainMatches,
@@ -956,6 +803,10 @@ function overlap(a,b){
 
 
 
+/* =========================
+   重み付き抽出
+========================= */
+
 function weightedPickWithoutReplacement(
   weights,
   k
@@ -967,12 +818,13 @@ function weightedPickWithoutReplacement(
       (_,i) => i + 1
     );
 
+
   const chosen = [];
 
 
   for(
-    let c = 0;
-    c < k;
+    let c=0;
+    c<k;
     c++
   ){
 
@@ -987,6 +839,7 @@ function weightedPickWithoutReplacement(
     let x =
       Math.random() * total;
 
+
     let acc = 0;
 
     let idx =
@@ -994,15 +847,13 @@ function weightedPickWithoutReplacement(
 
 
     for(
-      let i = 0;
-      i < items.length;
+      let i=0;
+      i<items.length;
       i++
     ){
 
       acc +=
-        weights[
-          items[i]
-        ] || 0;
+        weights[items[i]] || 0;
 
 
       if(x <= acc){
@@ -1017,26 +868,25 @@ function weightedPickWithoutReplacement(
 
 
     chosen.push(
-      items.splice(
-        idx,
-        1
-      )[0]
+      items.splice(idx,1)[0]
     );
 
   }
 
 
   return chosen.sort(
-    (a,b) => a - b
+    (a,b) => a-b
   );
 
 }
 
 
 
-function computeWeights(
-  history
-){
+/* =========================
+   重み計算
+========================= */
+
+function computeWeights(history){
 
   let allW =
     +document
@@ -1076,6 +926,7 @@ function computeWeights(
   const all =
     Array(38).fill(0);
 
+
   const recent =
     Array(38).fill(0);
 
@@ -1100,14 +951,14 @@ function computeWeights(
 
   const ta =
     all.reduce(
-      (a,b) => a+b,
+      (a,b)=>a+b,
       0
     ) || 1;
 
 
   const tr =
     recent.reduce(
-      (a,b) => a+b,
+      (a,b)=>a+b,
       0
     ) || 1;
 
@@ -1116,8 +967,8 @@ function computeWeights(
 
 
   for(
-    let n = 1;
-    n <= 37;
+    let n=1;
+    n<=37;
     n++
   ){
 
@@ -1145,19 +996,20 @@ function computeWeights(
 
 
 
+/* =========================
+   30通り生成
+========================= */
+
 function generateTickets(){
 
   const history =
-    get(
-      LS.history,
-      []
-    );
+    get(LS.history, []);
 
 
   if(!history.length){
 
     alert(
-      "先に「結果を更新」を押してください。"
+      "先に「① 結果を更新」を押してください。"
     );
 
     return;
@@ -1183,28 +1035,25 @@ function generateTickets(){
 
 
   /*
-   同じ対象回の予測が既に存在する場合、
-   ②を何回押しても作り直さない
+    同じ対象回を
+    何度も生成しない
   */
 
   if(
     saved &&
     saved.targetDraw === target &&
-    Array.isArray(
-      saved.tickets
-    ) &&
+    Array.isArray(saved.tickets) &&
     saved.tickets.length === 30
   ){
 
-    renderTickets();
+    renderAll();
 
     document
-      .getElementById(
-        "status"
-      )
+      .getElementById("status")
       .textContent =
 
       `第${target}回用30通りはすでに生成済みです。第${latest}回までの結果を使用しています。`;
+
 
     return;
 
@@ -1212,14 +1061,12 @@ function generateTickets(){
 
 
   const weights =
-    computeWeights(
-      history
-    );
+    computeWeights(history);
 
 
   /*
-   過去に出た本数字7個の
-   完全一致を除外
+    過去1等の
+    完全一致組み合わせ
   */
 
   const past =
@@ -1229,9 +1076,7 @@ function generateTickets(){
         r =>
           r.main
             .slice()
-            .sort(
-              (a,b) => a-b
-            )
+            .sort((a,b)=>a-b)
             .join("-")
       )
 
@@ -1239,23 +1084,14 @@ function generateTickets(){
 
 
   const maxOverlap =
-
     Math.max(
-
       0,
-
       Math.min(
-
         6,
-
         +document
-          .getElementById(
-            "maxOverlap"
-          )
+          .getElementById("maxOverlap")
           .value || 5
-
       )
-
     );
 
 
@@ -1266,9 +1102,11 @@ function generateTickets(){
 
 
   for(
-    let attempts = 0;
+    let attempts=0;
+
     attempts < 120000 &&
     pool.length < 5000;
+
     attempts++
   ){
 
@@ -1303,7 +1141,7 @@ function generateTickets(){
 
 
     /*
-     極端な構成のみ除外
+      極端な構成だけ除外
     */
 
     if(
@@ -1325,11 +1163,9 @@ function generateTickets(){
         (s,n) =>
 
           s +
-
           Math.log(
             (weights[n] || 1e-12)
-            +
-            1e-15
+            + 1e-15
           ),
 
         0
@@ -1342,10 +1178,8 @@ function generateTickets(){
 
 
     pool.push({
-
       nums,
       score
-
     });
 
   }
@@ -1353,8 +1187,7 @@ function generateTickets(){
 
   pool.sort(
     (a,b) =>
-      b.score -
-      a.score
+      b.score - a.score
   );
 
 
@@ -1372,8 +1205,7 @@ function generateTickets(){
             p.nums,
             s.nums
           )
-          <=
-          maxOverlap
+          <= maxOverlap
 
       )
 
@@ -1393,8 +1225,7 @@ function generateTickets(){
 
 
   /*
-   条件で30通り揃わない場合
-   重複していない候補から補充
+    足りない場合
   */
 
   if(
@@ -1445,13 +1276,13 @@ function generateTickets(){
 
 
   /*
-   ★重要
+    ★重要
 
-   予測しただけでは
-   purchasesには追加しない。
+    ここでは
+    purchases に入れない。
 
-   購入ボタンを押した時だけ
-   購入記録に追加する。
+    予測しただけなので
+    購入額は増えない。
   */
 
   set(
@@ -1477,9 +1308,7 @@ function generateTickets(){
 
 
   document
-    .getElementById(
-      "status"
-    )
+    .getElementById("status")
     .textContent =
 
     `第1回〜第${latest}回の${history.length}回分を分析し、第${target}回用30通りを生成しました。`;
@@ -1488,11 +1317,9 @@ function generateTickets(){
 
 
 
-/*
-==================================================
-購入確定
-==================================================
-*/
+/* =========================
+   購入確定
+========================= */
 
 function confirmPurchase(){
 
@@ -1505,9 +1332,7 @@ function confirmPurchase(){
 
   if(
     !x ||
-    !Array.isArray(
-      x.tickets
-    ) ||
+    !Array.isArray(x.tickets) ||
     x.tickets.length !== 30
   ){
 
@@ -1528,21 +1353,26 @@ function confirmPurchase(){
 
 
   /*
-   同じ対象回が既に購入済みか確認
+    同じ対象回が
+    すでに購入済みか
   */
 
-  const already =
+  const alreadyPurchased =
+
     purchases.some(
+
       p =>
-        p.targetDraw ===
+        p.targetDraw
+        ===
         x.targetDraw
+
     );
 
 
-  if(already){
+  if(alreadyPurchased){
 
     alert(
-      `第${x.targetDraw}回の30通りはすでに購入済みです。`
+      `第${x.targetDraw}回はすでに購入済みです。`
     );
 
     renderAll();
@@ -1552,18 +1382,10 @@ function confirmPurchase(){
   }
 
 
-  const ok =
-    confirm(
-      `第${x.targetDraw}回の30通りを購入済みにしますか？\n\n購入額：¥9,000`
-    );
-
-
-  if(!ok)
-    return;
-
-
   const newTickets =
+
     x.tickets.map(
+
       (nums,i) => ({
 
         sourceDraw:
@@ -1597,6 +1419,7 @@ function confirmPurchase(){
           0
 
       })
+
     );
 
 
@@ -1614,33 +1437,24 @@ function confirmPurchase(){
   renderAll();
 
 
-  document
-    .getElementById(
-      "status"
-    )
-    .textContent =
-
-    `第${x.targetDraw}回の30通りを購入済みにしました。購入額 ¥9,000 を記録しました。`;
+  alert(
+    `第${x.targetDraw}回の30通りを購入済みに登録しました。\n購入額 ¥9,000 を収支に反映しました。`
+  );
 
 }
 
 
 
-/*
-==================================================
-過去結果更新
-==================================================
-*/
+/* =========================
+   結果更新
+========================= */
 
 async function updateHistory(){
 
-  const status =
-    document.getElementById(
-      "status"
-    );
+  document
+    .getElementById("status")
+    .textContent =
 
-
-  status.textContent =
     "過去結果を取得しています…";
 
 
@@ -1650,32 +1464,16 @@ async function updateHistory(){
       await fetch(
         "/api/history",
         {
-          cache:
-            "no-store"
+          cache:"no-store"
         }
       );
-
-
-    if(!r.ok){
-
-      throw new Error(
-        `HTTP ${r.status}`
-      );
-
-    }
 
 
     const j =
       await r.json();
 
 
-    if(
-      !j.ok ||
-      !Array.isArray(
-        j.history
-      ) ||
-      !j.history.length
-    ){
+    if(!j.ok){
 
       throw new Error(
         j.error ||
@@ -1685,15 +1483,16 @@ async function updateHistory(){
     }
 
 
-    /*
-     回号順に整列
-    */
+    if(
+      !Array.isArray(j.history) ||
+      !j.history.length
+    ){
 
-    j.history.sort(
-      (a,b) =>
-        a.draw -
-        b.draw
-    );
+      throw new Error(
+        "結果データが空です"
+      );
+
+    }
 
 
     set(
@@ -1708,16 +1507,19 @@ async function updateHistory(){
       ].draw;
 
 
-    status.textContent =
-      `第${latest}回まで更新しました。全${j.history.length}回分です。`;
+    document
+      .getElementById("status")
+      .textContent =
+
+      `第${latest}回まで更新しました。`;
 
 
     /*
-     更新と同時に
-     購入済み予測を自動照合
-    */
+      自動で照合はしない。
 
-    checkResults(true);
+      ユーザーが③を押した時に
+      照合する。
+    */
 
     renderAll();
 
@@ -1725,14 +1527,14 @@ async function updateHistory(){
 
   catch(e){
 
-    console.error(
-      "HISTORY ERROR:",
-      e
-    );
+    console.error(e);
 
 
-    status.textContent =
-      `更新に失敗しました：${e.message}`;
+    document
+      .getElementById("status")
+      .textContent =
+
+      "更新に失敗しました。通信状況または取得ページ側の変更をご確認ください。";
 
   }
 
@@ -1740,15 +1542,11 @@ async function updateHistory(){
 
 
 
-/*
-==================================================
-結果照合
-==================================================
-*/
+/* =========================
+   当選照合
+========================= */
 
-function checkResults(
-  silent = false
-){
+function checkResults(){
 
   const history =
     get(
@@ -1757,63 +1555,113 @@ function checkResults(
     );
 
 
-  const map =
-    new Map(
+  const last =
+    get(
+      LS.lastTickets,
+      null
+    );
 
-      history.map(
-        r => [
-          r.draw,
-          r
-        ]
-      )
+
+  if(
+    !last ||
+    !last.targetDraw
+  ){
+
+    alert(
+      "予測データがありません。"
+    );
+
+    return;
+
+  }
+
+
+  const result =
+    history.find(
+
+      r =>
+        r.draw
+        ===
+        last.targetDraw
 
     );
 
 
-  const purchases =
+  if(!result){
+
+    alert(
+      `第${last.targetDraw}回の結果はまだ取得されていません。`
+    );
+
+    return;
+
+  }
+
+
+  let purchases =
     get(
       LS.purchases,
       []
     );
 
 
+  const targetPurchases =
+    purchases.filter(
+
+      p =>
+        p.targetDraw
+        ===
+        last.targetDraw
+
+    );
+
+
+  if(!targetPurchases.length){
+
+    alert(
+      `第${last.targetDraw}回の30通りは購入済みに登録されていません。`
+    );
+
+    return;
+
+  }
+
+
   let newly = 0;
 
 
-  for(
-    const p of purchases
-  ){
+  purchases.forEach(p => {
+
+    if(
+      p.targetDraw
+      !==
+      last.targetDraw
+    )
+      return;
+
 
     if(p.checked)
-      continue;
-
-
-    const r =
-      map.get(
-        p.targetDraw
-      );
-
-
-    /*
-     まだ抽せん結果がない
-    */
-
-    if(!r)
-      continue;
+      return;
 
 
     const mm =
+
       p.nums.filter(
+
         n =>
-          r.main.includes(n)
+          result.main.includes(n)
+
       ).length;
 
 
     const bm =
+
       p.nums.filter(
+
         n =>
-          (r.bonus || [])
+          (result.bonus || [])
             .includes(n)
+
       ).length;
 
 
@@ -1832,154 +1680,7 @@ function checkResults(
 
     newly++;
 
-  }
-
-
-  set(
-    LS.purchases,
-    purchases
-  );
-
-
-  renderAll();
-
-
-  if(!silent){
-
-    if(newly){
-
-      alert(
-        `照合完了。新たに ${newly}口 を照合しました。`
-      );
-
-    }else{
-
-      alert(
-        "新しく照合できる購入済みデータはありません。"
-      );
-
-    }
-
-  }
-
-}
-
-
-
-/*
-==================================================
-当選額
-==================================================
-*/
-
-function showPrizeInput(){
-
-  const purchases =
-
-    get(
-      LS.purchases,
-      []
-    )
-
-    .filter(
-      p => p.checked
-    );
-
-
-  if(
-    !purchases.length
-  ){
-
-    alert(
-      "先に購入済みの30通りを当選結果と照合してください。"
-    );
-
-    return;
-
-  }
-
-
-  document
-    .getElementById(
-      "prizeBox"
-    )
-    .style.display =
-      "block";
-
-
-  document
-    .getElementById(
-      "prizeDraw"
-    )
-    .value =
-
-    Math.max(
-      ...purchases.map(
-        p =>
-          p.targetDraw
-      )
-    );
-
-}
-
-
-
-function savePrizes(){
-
-  const draw =
-    +document
-      .getElementById(
-        "prizeDraw"
-      )
-      .value;
-
-
-  const amounts = {};
-
-
-  for(
-    let i = 1;
-    i <= 6;
-    i++
-  ){
-
-    amounts[
-      `${i}等`
-    ] =
-
-    +document
-      .getElementById(
-        `p${i}`
-      )
-      .value || 0;
-
-  }
-
-
-  const purchases =
-    get(
-      LS.purchases,
-      []
-    );
-
-
-  purchases.forEach(
-    p => {
-
-      if(
-        p.targetDraw === draw &&
-        p.rank
-      ){
-
-        p.prize =
-          amounts[
-            p.rank
-          ] || 0;
-
-      }
-
-    }
-  );
+  });
 
 
   set(
@@ -1992,18 +1693,163 @@ function savePrizes(){
 
 
   alert(
-    `第${draw}回の当選額を反映しました。`
+    `第${last.targetDraw}回を照合しました。\n${newly}口を新たに照合しました。`
   );
 
 }
 
 
 
-/*
-==================================================
-30通り表示
-==================================================
-*/
+/* =========================
+   当選額入力
+========================= */
+
+function showPrizeInput(){
+
+  const last =
+    get(
+      LS.lastTickets,
+      null
+    );
+
+
+  if(
+    !last ||
+    !last.targetDraw
+  ){
+
+    alert(
+      "対象回がありません。"
+    );
+
+    return;
+
+  }
+
+
+  const purchases =
+    get(
+      LS.purchases,
+      []
+    );
+
+
+  const checked =
+    purchases.filter(
+
+      p =>
+        p.targetDraw
+          ===
+        last.targetDraw
+
+        &&
+
+        p.checked
+
+    );
+
+
+  if(!checked.length){
+
+    alert(
+      "先に当選結果と照合してください。"
+    );
+
+    return;
+
+  }
+
+
+  document
+    .getElementById("prizeBox")
+    .style.display =
+    "block";
+
+
+  document
+    .getElementById("prizeDraw")
+    .value =
+    last.targetDraw;
+
+}
+
+
+
+/* =========================
+   当選額保存
+========================= */
+
+function savePrizes(){
+
+  const draw =
+    +document
+      .getElementById("prizeDraw")
+      .value;
+
+
+  const amounts = {};
+
+
+  for(
+    let i=1;
+    i<=6;
+    i++
+  ){
+
+    amounts[`${i}等`] =
+
+      +document
+        .getElementById(`p${i}`)
+        .value
+
+      || 0;
+
+  }
+
+
+  const purchases =
+    get(
+      LS.purchases,
+      []
+    );
+
+
+  purchases.forEach(p => {
+
+    if(
+      p.targetDraw === draw &&
+      p.rank
+    ){
+
+      p.prize =
+        amounts[p.rank]
+        || 0;
+
+    }
+
+  });
+
+
+  set(
+    LS.purchases,
+    purchases
+  );
+
+
+  renderAll();
+
+
+  alert(
+    `第${draw}回の当選額を収支に反映しました。`
+  );
+
+}
+
+
+
+/* =========================
+   30通り表示
+========================= */
 
 function renderTickets(){
 
@@ -2015,28 +1861,23 @@ function renderTickets(){
 
 
   const el =
-    document.getElementById(
-      "tickets"
-    );
+    document
+      .getElementById("tickets");
 
 
   const purchaseBtn =
-    document.getElementById(
-      "purchaseBtn"
-    );
+    document
+      .getElementById("purchaseBtn");
 
 
   const purchaseStatus =
-    document.getElementById(
-      "purchaseStatus"
-    );
+    document
+      .getElementById("purchaseStatus");
 
 
   if(
     !x ||
-    !Array.isArray(
-      x.tickets
-    ) ||
+    !Array.isArray(x.tickets) ||
     !x.tickets.length
   ){
 
@@ -2048,8 +1889,8 @@ function renderTickets(){
       "none";
 
 
-    purchaseStatus.innerHTML =
-      "";
+    purchaseStatus.style.display =
+      "none";
 
 
     return;
@@ -2064,42 +1905,56 @@ function renderTickets(){
     );
 
 
+  const purchases =
+    get(
+      LS.purchases,
+      []
+    );
+
+
   const sourceDraw =
     x.sourceDraw ||
-    (
-      x.targetDraw - 1
+    (x.targetDraw - 1);
+
+
+  const purchased =
+
+    purchases.some(
+
+      p =>
+        p.targetDraw
+        ===
+        x.targetDraw
+
     );
 
 
   el.innerHTML = `
 
-    <div class="predictionHeader">
+    <div class="prediction-title">
 
-      <div class="predictionTitle">
-
+      <strong>
         🎯 第${x.targetDraw}回 予測30通り
+      </strong>
 
-      </div>
-
-      <div class="predictionSub">
-
+      <div class="tiny">
         分析対象：
         第1回〜第${sourceDraw}回
         （${
           history.filter(
             r =>
-              r.draw <=
-              sourceDraw
+              r.draw <= sourceDraw
           ).length
         }回分）
-
       </div>
 
     </div>
 
 
     ${
+
       x.tickets.map(
+
         (nums,i) => `
 
           <div class="ticket">
@@ -2108,62 +1963,51 @@ function renderTickets(){
               ${i+1}
             </span>
 
-            <div class="nums">
+            <span class="nums">
 
               ${
+
                 nums.map(
+
                   n => `
 
-                    <span class="ball">
-                      ${
-                        String(n)
-                          .padStart(
-                            2,
-                            "0"
-                          )
-                      }
+                    <span class="num">
+                      ${String(n).padStart(2,"0")}
                     </span>
 
                   `
+
                 ).join("")
+
               }
 
-            </div>
+            </span>
 
           </div>
 
         `
+
       ).join("")
+
     }
 
 
     <div class="notice">
 
-      ℹ️ 過去に出た本数字7個の完全一致組み合わせは生成対象から除外しています。
+      ℹ️ 過去に出た本数字7個の
+      完全一致組み合わせは
+      生成対象から除外しています。
 
       <br><br>
 
-      ただし、この除外や過去の出現傾向を利用すること自体が、
-      将来の抽せんにおける数学的な当選確率を高めるものではありません。
+      ただし、この除外や過去の出現傾向を
+      利用すること自体が、
+      将来の抽せんにおける数学的な
+      当選確率を高めるものではありません。
 
     </div>
 
   `;
-
-
-  const purchases =
-    get(
-      LS.purchases,
-      []
-    );
-
-
-  const purchased =
-    purchases.some(
-      p =>
-        p.targetDraw ===
-        x.targetDraw
-    );
 
 
   if(purchased){
@@ -2176,16 +2020,12 @@ function renderTickets(){
       true;
 
 
-    purchaseBtn.className =
-      "purchased";
-
-
     purchaseBtn.textContent =
       `✓ 第${x.targetDraw}回 30通り購入済み`;
 
 
-    purchaseStatus.className =
-      "purchaseStatus done";
+    purchaseStatus.style.display =
+      "block";
 
 
     purchaseStatus.textContent =
@@ -2203,20 +2043,16 @@ function renderTickets(){
       false;
 
 
-    purchaseBtn.className =
-      "green";
-
-
     purchaseBtn.textContent =
-      "🛒 この30通りを購入済みにする（¥9,000）";
+      "この30通りを購入済みにする（¥9,000）";
 
 
-    purchaseStatus.className =
-      "purchaseStatus preview";
+    purchaseStatus.style.display =
+      "block";
 
 
     purchaseStatus.textContent =
-      "現在は予測のみです。購入額には加算されていません。";
+      "予測を生成しただけでは購入額には加算されません。";
 
   }
 
@@ -2224,11 +2060,9 @@ function renderTickets(){
 
 
 
-/*
-==================================================
-ランキング
-==================================================
-*/
+/* =========================
+   出現ランキング
+========================= */
 
 function renderRanking(){
 
@@ -2240,14 +2074,13 @@ function renderRanking(){
 
 
   const el =
-    document.getElementById(
-      "ranking"
-    );
+    document
+      .getElementById("ranking");
 
 
   if(!h.length){
 
-    el.textContent =
+    el.innerHTML =
       "結果を更新すると表示されます。";
 
     return;
@@ -2260,10 +2093,15 @@ function renderRanking(){
 
 
   h.forEach(
+
     r =>
       r.main.forEach(
-        n => c[n]++
+
+        n =>
+          c[n]++
+
       )
+
   );
 
 
@@ -2271,25 +2109,27 @@ function renderRanking(){
 
     Array.from(
       {length:37},
-      (_,i) => [
-        i+1,
-        c[i+1]
-      ]
+      (_,i) =>
+        [
+          i+1,
+          c[i+1]
+        ]
     )
 
     .sort(
+
       (a,b) =>
-        b[1] -
-        a[1]
+        b[1] - a[1]
         ||
-        a[0] -
-        b[0]
+        a[0] - b[0]
+
     );
 
 
   el.innerHTML =
 
     arr.map(
+
       (x,i) =>
 
         `${i+1}位：${String(x[0]).padStart(2,"0")}（${x[1]}回）`
@@ -2300,11 +2140,278 @@ function renderRanking(){
 
 
 
-/*
-==================================================
-画面全体更新
-==================================================
-*/
+/* =========================
+   一致数表示
+========================= */
+
+function renderMatches(){
+
+  const h =
+    get(
+      LS.history,
+      []
+    );
+
+
+  const p =
+    get(
+      LS.purchases,
+      []
+    );
+
+
+  const last =
+    get(
+      LS.lastTickets,
+      null
+    );
+
+
+  const el =
+    document
+      .getElementById("matchStats");
+
+
+  if(
+    !last ||
+    !last.targetDraw
+  ){
+
+    el.innerHTML = `
+
+      <div class="result-message">
+        まだ予測を生成していません。
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  const target =
+    last.targetDraw;
+
+
+  const result =
+    h.find(
+
+      r =>
+        r.draw === target
+
+    );
+
+
+  const targetPurchases =
+    p.filter(
+
+      x =>
+        x.targetDraw === target
+
+    );
+
+
+  const purchased =
+    targetPurchases.length > 0;
+
+
+  if(!purchased){
+
+    el.innerHTML = `
+
+      <div class="result-message">
+
+        第${target}回はまだ
+        購入済みに登録されていません。
+
+      </div>
+
+      ${emptyMatchBoxes()}
+
+    `;
+
+    return;
+
+  }
+
+
+  if(!result){
+
+    el.innerHTML = `
+
+      <div class="result-message">
+
+        第${target}回は
+        まだ結果未取得です。
+
+        <br>
+
+        抽せん後に「① 結果を更新」を
+        押してください。
+
+      </div>
+
+      ${emptyMatchBoxes()}
+
+    `;
+
+    return;
+
+  }
+
+
+  const checked =
+    targetPurchases.filter(
+      x => x.checked
+    );
+
+
+  if(!checked.length){
+
+    el.innerHTML = `
+
+      <div
+        class="result-message"
+        style="
+          background:#fff7dc;
+          color:#946200;
+        "
+      >
+
+        第${target}回の結果を取得済みです。
+
+        <br>
+
+        「③ 当選結果と照合」を
+        押してください。
+
+      </div>
+
+      ${emptyMatchBoxes()}
+
+    `;
+
+    return;
+
+  }
+
+
+  const m = {
+    3:0,
+    4:0,
+    5:0,
+    6:0,
+    7:0
+  };
+
+
+  checked.forEach(x => {
+
+    if(
+      m[x.matches]
+      !==
+      undefined
+    ){
+
+      m[x.matches]++;
+
+    }
+
+  });
+
+
+  el.innerHTML = `
+
+    <div class="result-message">
+
+      第${target}回
+      30通りの照合結果
+
+    </div>
+
+
+    <div class="match-grid">
+
+      <div class="match-box">
+        3個一致
+        <b>${m[3]}口</b>
+      </div>
+
+      <div class="match-box">
+        4個一致
+        <b>${m[4]}口</b>
+      </div>
+
+      <div class="match-box">
+        5個一致
+        <b>${m[5]}口</b>
+      </div>
+
+      <div class="match-box">
+        6個一致
+        <b>${m[6]}口</b>
+      </div>
+
+      <div class="match-box">
+        7個一致
+        <b>${m[7]}口</b>
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+
+/* =========================
+   未照合表示
+========================= */
+
+function emptyMatchBoxes(){
+
+  return `
+
+    <div class="match-grid">
+
+      <div class="match-box">
+        3個一致
+        <b>―</b>
+      </div>
+
+      <div class="match-box">
+        4個一致
+        <b>―</b>
+      </div>
+
+      <div class="match-box">
+        5個一致
+        <b>―</b>
+      </div>
+
+      <div class="match-box">
+        6個一致
+        <b>―</b>
+      </div>
+
+      <div class="match-box">
+        7個一致
+        <b>―</b>
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+
+
+/* =========================
+   全体描画
+========================= */
 
 function renderAll(){
 
@@ -2322,76 +2429,78 @@ function renderAll(){
     );
 
 
+  const last =
+    get(
+      LS.lastTickets,
+      null
+    );
+
+
   document
-    .getElementById(
-      "latestDraw"
-    )
+    .getElementById("latestDraw")
     .textContent =
 
     h.length
-
-      ? `第${
-          h[
-            h.length - 1
-          ].draw
-        }回`
-
-      : "-";
+      ?
+      `第${h[h.length-1].draw}回`
+      :
+      "-";
 
 
   document
-    .getElementById(
-      "historyCount"
-    )
+    .getElementById("historyCount")
     .textContent =
-      h.length;
+    h.length;
 
+
+  /*
+    purchases に存在するものだけ
+    実購入として集計
+  */
 
   const purchase =
 
     p.reduce(
+
       (s,x) =>
-        s +
-        (x.price || 0),
+        s + (x.price || 0),
+
       0
+
     );
 
 
   const prize =
 
     p.reduce(
+
       (s,x) =>
-        s +
-        (x.prize || 0),
+        s + (x.prize || 0),
+
       0
+
     );
 
 
   const profit =
-    prize -
-    purchase;
+    prize - purchase;
 
 
   document
-    .getElementById(
-      "purchase"
-    )
+    .getElementById("purchase")
     .textContent =
-      yen(purchase);
+    yen(purchase);
 
 
   document
-    .getElementById(
-      "prize"
-    )
+    .getElementById("prize")
     .textContent =
-      yen(prize);
+    yen(prize);
 
 
   const pe =
-    document.getElementById(
-      "profit"
-    );
+    document
+      .getElementById("profit");
 
 
   pe.textContent =
@@ -2400,85 +2509,66 @@ function renderAll(){
 
   pe.className =
     profit >= 0
-      ? "good"
-      : "bad";
+      ?
+      "good"
+      :
+      "bad";
+
+
+  const profitBox =
+    document
+      .getElementById("profitBox");
+
+
+  profitBox.style.background =
+    profit >= 0
+      ?
+      "#eafaf2"
+      :
+      "#fff0f0";
+
+
+  /*
+    照合済み表示も
+    現在の予測回だけ
+  */
+
+  let checkedCount = 0;
+
+
+  if(
+    last &&
+    last.targetDraw
+  ){
+
+    checkedCount =
+
+      p.filter(
+
+        x =>
+          x.targetDraw
+            ===
+          last.targetDraw
+
+          &&
+
+          x.checked
+
+      ).length;
+
+  }
 
 
   document
-    .getElementById(
-      "checked"
-    )
+    .getElementById("checked")
     .textContent =
 
-    `${p.filter(
-      x => x.checked
-    ).length}口`;
-
-
-  const m = {
-    3:0,
-    4:0,
-    5:0,
-    6:0,
-    7:0
-  };
-
-
-  p.filter(
-    x => x.checked
-  )
-  .forEach(
-    x => {
-
-      if(
-        m[x.matches] !==
-        undefined
-      ){
-
-        m[x.matches]++;
-
-      }
-
-    }
-  );
-
-
-  document
-    .getElementById("m3")
-    .textContent =
-      `${m[3]}口`;
-
-  document
-    .getElementById("m4")
-    .textContent =
-      `${m[4]}口`;
-
-  document
-    .getElementById("m5")
-    .textContent =
-      `${m[5]}口`;
-
-  document
-    .getElementById("m6")
-    .textContent =
-      `${m[6]}口`;
-
-  document
-    .getElementById("m7")
-    .textContent =
-      `${m[7]}口`;
-
-
-  document
-    .getElementById(
-      "matchStats"
-    )
-    .textContent =
-
-    `3個一致 ${m[3]}口 / 4個一致 ${m[4]}口 / 5個一致 ${m[5]}口 / 6個一致 ${m[6]}口 / 7個一致 ${m[7]}口`;
+    `${checkedCount}口`;
 
 
   renderTickets();
+
+  renderMatches();
 
   renderRanking();
 
@@ -2486,11 +2576,9 @@ function renderAll(){
 
 
 
-/*
-==================================================
-起動
-==================================================
-*/
+/* =========================
+   起動
+========================= */
 
 window.addEventListener(
   "load",
@@ -2506,7 +2594,8 @@ window.addEventListener(
     if(s){
 
       for(
-        const k of [
+        const k of
+        [
           "allW",
           "recentW",
           "uniformW",
@@ -2521,7 +2610,7 @@ window.addEventListener(
           document
             .getElementById(k)
             .value =
-              s[k];
+            s[k];
 
         }
 
@@ -2537,45 +2626,50 @@ window.addEventListener(
       "maxOverlap"
     ]
 
-    .forEach(
-      k =>
+    .forEach(k => {
 
-        document
-          .getElementById(k)
-          .addEventListener(
-            "change",
-            () => {
+      document
+        .getElementById(k)
+        .addEventListener(
+          "change",
+          () => {
 
-              set(
+            set(
 
-                LS.settings,
+              LS.settings,
 
-                Object.fromEntries(
+              Object.fromEntries(
 
-                  [
-                    "allW",
-                    "recentW",
-                    "uniformW",
-                    "maxOverlap"
+                [
+                  "allW",
+                  "recentW",
+                  "uniformW",
+                  "maxOverlap"
+                ]
+
+                .map(
+
+                  x => [
+
+                    x,
+
+                    document
+                      .getElementById(x)
+                      .value
+
                   ]
-
-                  .map(
-                    x => [
-                      x,
-                      document
-                        .getElementById(x)
-                        .value
-                    ]
-                  )
 
                 )
 
-              );
+              )
 
-            }
-          )
+            );
 
-    );
+          }
+
+        );
+
+    });
 
 
     if(
