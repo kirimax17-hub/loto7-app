@@ -155,41 +155,154 @@ function computeWeights(history){
 }
 
 function generateTickets(){
-  const history=get(LS.history,[]);
-  if(!history.length){ alert("先に「公式結果を更新」を押してください。"); return; }
-  const weights=computeWeights(history);
-  const past=new Set(history.map(r=>r.main.slice().sort((a,b)=>a-b).join("-")));
-  const maxOverlap=Math.max(0,Math.min(6,+document.getElementById("maxOverlap").value||5));
-  let pool=[];
-  const seen=new Set();
-  for(let attempts=0;attempts<120000 && pool.length<5000;attempts++){
-    const nums=weightedPickWithoutReplacement(weights,7);
-    const key=nums.join("-");
-    if(past.has(key)||seen.has(key)) continue;
-    const odd=nums.filter(n=>n%2).length, low=nums.filter(n=>n<=18).length;
-    if(odd===0||odd===7||low===0||low===7) continue;
-    seen.add(key);
-    const score=nums.reduce((s,n)=>s+Math.log((weights[n]||1e-12)+1e-15),0)+Math.random()*.12;
-    pool.push({nums,score});
-  }
-  pool.sort((a,b)=>b.score-a.score);
-  const selected=[];
-  for(const p of pool){
-    if(selected.every(s=>overlap(p.nums,s.nums)<=maxOverlap)){ selected.push(p); if(selected.length===30) break; }
-  }
-  if(selected.length<30){
-    for(const p of pool){ if(!selected.some(s=>s.nums.join("-")===p.nums.join("-"))){selected.push(p); if(selected.length===30)break;} }
+  const history = get(LS.history, []);
+
+  if(!history.length){
+    alert("先に「公式結果を更新」を押してください。");
+    return;
   }
 
-  const latest=history[history.length-1].draw;
-  const purchases=get(LS.purchases,[]);
-  const target=latest+1;
-  purchases.push(...selected.map((x,i)=>({
-    sourceDraw:latest,targetDraw:target,ticketNo:i+1,nums:x.nums,price:300,checked:false,matches:null,rank:"",prize:0
-  })));
-  set(LS.purchases,purchases); set(LS.lastTickets,{targetDraw:target,tickets:selected.map(x=>x.nums)});
-  renderTickets(); renderAll();
-  document.getElementById("status").textContent=`第${latest}回までのデータで、第${target}回用30通りを保存しました。`;
+  const latest = history[history.length - 1].draw;
+  const target = latest + 1;
+
+  // すでに今回用の30通りを生成済みなら、新しく作らない
+  const saved = get(LS.lastTickets, null);
+
+  if(
+    saved &&
+    saved.targetDraw === target &&
+    Array.isArray(saved.tickets) &&
+    saved.tickets.length === 30
+  ){
+    renderTickets();
+    document.getElementById("status").textContent =
+      `第${target}回用30通りはすでに生成済みです。第${latest}回までの結果を使用しています。`;
+    return;
+  }
+
+  const weights = computeWeights(history);
+
+  // 過去に1等となった本数字7個の完全一致を除外
+  const past = new Set(
+    history.map(r =>
+      r.main.slice().sort((a,b)=>a-b).join("-")
+    )
+  );
+
+  const maxOverlap = Math.max(
+    0,
+    Math.min(
+      6,
+      +document.getElementById("maxOverlap").value || 5
+    )
+  );
+
+  let pool = [];
+  const seen = new Set();
+
+  for(
+    let attempts = 0;
+    attempts < 120000 && pool.length < 5000;
+    attempts++
+  ){
+    const nums = weightedPickWithoutReplacement(weights, 7);
+    const key = nums.join("-");
+
+    if(past.has(key) || seen.has(key)) continue;
+
+    const odd = nums.filter(n => n % 2).length;
+    const low = nums.filter(n => n <= 18).length;
+
+    // 極端な構成だけ除外
+    if(odd === 0 || odd === 7 || low === 0 || low === 7) continue;
+
+    seen.add(key);
+
+    const score =
+      nums.reduce(
+        (s,n) =>
+          s + Math.log((weights[n] || 1e-12) + 1e-15),
+        0
+      )
+      + Math.random() * .12;
+
+    pool.push({
+      nums,
+      score
+    });
+  }
+
+  pool.sort((a,b) => b.score - a.score);
+
+  const selected = [];
+
+  for(const p of pool){
+    if(
+      selected.every(
+        s => overlap(p.nums, s.nums) <= maxOverlap
+      )
+    ){
+      selected.push(p);
+
+      if(selected.length === 30) break;
+    }
+  }
+
+  // 30通りに足りなかった場合
+  if(selected.length < 30){
+    for(const p of pool){
+
+      if(
+        !selected.some(
+          s => s.nums.join("-") === p.nums.join("-")
+        )
+      ){
+        selected.push(p);
+
+        if(selected.length === 30) break;
+      }
+    }
+  }
+
+  if(selected.length < 30){
+    alert("条件が厳しすぎて30通り生成できませんでした。");
+    return;
+  }
+
+  let purchases = get(LS.purchases, []);
+
+  // 念のため同じ対象回の未照合データは削除
+  // → 同じ回の30口が何度も増えるのを防ぐ
+  purchases = purchases.filter(
+    p => !(p.targetDraw === target && !p.checked)
+  );
+
+  const newTickets = selected.map((x,i) => ({
+    sourceDraw: latest,
+    targetDraw: target,
+    ticketNo: i + 1,
+    nums: x.nums,
+    price: 300,
+    checked: false,
+    matches: null,
+    rank: "",
+    prize: 0
+  }));
+
+  purchases.push(...newTickets);
+
+  set(LS.purchases, purchases);
+
+  set(LS.lastTickets, {
+    sourceDraw: latest,
+    targetDraw: target,
+    tickets: selected.map(x => x.nums)
+  });
+
+  renderAll();
+
+  document.getElementById("status").textContent =
+    `第1回〜第${latest}回の${history.length}回分を分析し、第${target}回用30通りを生成しました。`;
 }
 
 async function updateHistory(){
@@ -237,9 +350,51 @@ function savePrizes(){
 }
 
 function renderTickets(){
-  const x=get(LS.lastTickets,null), el=document.getElementById("tickets");
-  if(!x){el.innerHTML="まだ生成していません。";return}
-  el.innerHTML=x.tickets.map((nums,i)=>`<div class="ticket"><span class="badge">${i+1}</span><span class="nums">${nums.map(n=>String(n).padStart(2,"0")).join("　")}</span></div>`).join("");
+  const x = get(LS.lastTickets, null);
+  const el = document.getElementById("tickets");
+
+  if(!x || !Array.isArray(x.tickets) || !x.tickets.length){
+    el.innerHTML = "まだ生成していません。";
+    return;
+  }
+
+  const history = get(LS.history, []);
+  const sourceDraw = x.sourceDraw || (x.targetDraw - 1);
+
+  el.innerHTML = `
+    <div style="margin-bottom:14px">
+      <div style="font-size:18px;font-weight:700;color:#111827">
+        第${x.targetDraw}回 予測30通り
+      </div>
+
+      <div style="margin-top:4px;color:#6b7280">
+        分析対象：第1回〜第${sourceDraw}回
+        （${history.filter(r => r.draw <= sourceDraw).length}回分）
+      </div>
+    </div>
+
+    ${x.tickets.map((nums,i)=>`
+      <div class="ticket">
+        <span class="badge">${i+1}</span>
+        <span class="nums">
+          ${nums.map(n=>String(n).padStart(2,"0")).join("　")}
+        </span>
+      </div>
+    `).join("")}
+
+    <div style="
+      margin-top:16px;
+      padding:12px;
+      background:#f9fafb;
+      border-radius:12px;
+      line-height:1.6;
+      color:#6b7280;
+    ">
+      過去に出た本数字7個の完全一致組み合わせは生成対象から除外しています。
+      ただし、この除外や過去の出現傾向を利用すること自体が、
+      将来の抽せんにおける数学的な当選確率を高めるものではありません。
+    </div>
+  `;
 }
 function renderRanking(){
   const h=get(LS.history,[]), el=document.getElementById("ranking"); if(!h.length)return;
