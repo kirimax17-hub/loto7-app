@@ -126,68 +126,41 @@ def discover_links():
     return sorted(links)
 
 def fetch_history():
+
     try:
+
         r = requests.get(PAYPAY_CURRENT, headers=HEADERS, timeout=20)
+
         r.raise_for_status()
 
-        soup = BeautifulSoup(r.text, "html.parser")
-        print(soup.get_text(" ", strip=True)[:3000], flush=True)
+        tables = pd.read_html(r.text)
+
         results = []
 
-        for table in soup.find_all("table"):
-            text = normalize_text(table.get_text(" ", strip=True))
+        for df in tables:
 
-            draw_match = re.search(r"(?:第\s*)?(\d{3,4})\s*回", text)
-            date_match = re.search(
-                r"(20\d{2})[年/\-.]\s*(\d{1,2})[月/\-.]\s*(\d{1,2})日?",
-                text
-            )
+            records = extract_rows_from_table(df)
 
-            if not draw_match:
-                continue
+            for rec in records:
 
-            draw = int(draw_match.group(1))
+                if rec["draw"] and len(rec["main"]) == 7:
 
-            date = ""
-            if date_match:
-                y, m, d = map(int, date_match.groups())
-                date = f"{y:04d}-{m:02d}-{d:02d}"
+                    results.append(rec)
 
-            main_nums = []
-            bonus_nums = []
+        # 同じ回号が重複した場合は1件にまとめる
 
-            main_match = re.search(
-                r"本数字\s*([0-9\s,\-・]+?)(?:ボーナス数字|当せん金額|$)",
-                text
-            )
-            if main_match:
-                main_nums = [
-                    int(n) for n in re.findall(r"\d+", main_match.group(1))
-                    if 1 <= int(n) <= 37
-                ][:7]
+        unique = {}
 
-            bonus_match = re.search(
-                r"ボーナス数字\s*([0-9\s,\-・]+?)(?:当せん金額|1等|$)",
-                text
-            )
-            if bonus_match:
-                bonus_nums = [
-                    int(n) for n in re.findall(r"\d+", bonus_match.group(1))
-                    if 1 <= int(n) <= 37
-                ][:2]
+        for rec in results:
 
-            if len(main_nums) == 7:
-                results.append({
-                    "draw": draw,
-                    "date": date,
-                    "main": sorted(main_nums),
-                    "bonus": bonus_nums
-                })
+            unique[rec["draw"]] = rec
 
-        return sorted(results, key=lambda x: x["draw"])
+        return [unique[k] for k in sorted(unique.keys())]
 
     except Exception as e:
+
         print("FETCH ERROR:", repr(e), flush=True)
+
         return []
 @app.get("/")
 def index():
